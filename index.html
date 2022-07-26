@@ -1,0 +1,291 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Bazel</title>
+
+    <link rel="stylesheet" href="./lib/reset.css">
+    <link rel="stylesheet" href="./lib/reveal.css">
+    <link rel="stylesheet" href="./lib/theme/black.css">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sigmar+One&display=swap');
+
+        body * {
+            font-family: 'Sigmar One', cursive !important;
+        }
+
+        .slides {
+            width: 100% !important;
+        }
+
+        .list-without-bullets li {
+            list-style-type: none;
+        }
+
+        .container {
+            display: flex;
+        }
+
+        .col {
+            margin: 10px;
+            flex: 1;
+        }
+
+        .not-bold {
+            font-weight: 100 !important;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .center {
+            text-align: center !important;
+        }
+
+        .italic {
+            font-style: italic !important;
+        }
+
+        .underline {
+            text-decoration: underline !important;
+        }
+
+        .regular-text {
+            font-size: 1.3rem;
+            text-align: left;
+        }
+
+        .medium-text {
+            font-size: 1.1rem !important;
+        }
+
+        .title {
+            font-size: 1.5rem;
+        }
+
+        .very-small-text {
+            font-size: 0.7rem !important;
+        }
+
+        .no-border {
+            border: none !important;
+        }
+
+        .quote {
+            font-size: 1.7rem !important;
+            text-align: right !important;
+        }
+
+        .quote > .author {
+            margin-top: 10px;
+            font-style: italic !important;
+            font-size: 1.3rem !important;
+        }
+
+        .image-container {
+            align-self: center;
+        }
+
+        .image-container > img {
+            border: 10px solid snow;
+        }
+
+        .image-container > .author {
+            margin-top: 10px;
+            font-style: italic !important;
+            font-size: 1rem !important;
+        }
+
+        #digital-twins-demo-wrapper {
+            margin-left: 10%;
+            width: 800px;
+            height: 700px;
+            background-color: black;
+        }
+    </style>
+</head>
+
+<body id="net">
+    <div class="reveal">
+        <div class="slides">
+            <section>
+                <h1 class="not-bold italic">vSAN UI and Bazel</h6>
+            </section>
+
+            <section>
+                <h2>Overview</h2>
+                <ol class="large-text">
+                    <li>What is Bazel?</li>
+                    <li>What Bazel does?</li>
+                    <li>How Bazel does it?</li>
+                    <li>How we use Bazel to build the vSAN UI?</li>
+                </ol>
+            </section>
+
+            <section>
+                <section>
+                    <h3>What is Bazel?</h3>
+                </section>
+                <section>
+                    <blockquote class="quote">
+                        <span>Build orchestrator tool supporting multiple languages and building outputs for multiple platforms.</span>
+                    </blockquote>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h3>What Bazel does?</h3>
+                </section>
+                <section>
+                    <h4>Define build actions</h4>
+                </section>
+                <section>
+                    <h4>Analyze dependency relations</h4>
+                </section>
+                <section>
+                    <h4>Build in the most effective way</h4>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h3>How Bazel does it?</h3>
+                </section>
+                <section>
+                    <h4>Definition of terms...</h4>
+                </section>
+                <section>
+                    <h4>Workspace</h4>
+                    <blockquote class="quote">
+                        <span>The root directory containing all of the source files to build and configurations about external dependencies.</span>
+                    </blockquote>
+                    <div class="regular-text center" style="margin-left: 5%; margin-right: 5%;">
+                        A WORKSPACE directory contains "WORKSPACE.bazel" config file which defines a "repository" and also describes references
+                        to external "repositories" required for the build.
+                    </div>
+                </section>
+                <section>
+                    <h4>Repository</h4>
+                    <blockquote class="quote">
+                        <span>Directory containing source code and build instructions</span>
+                    </blockquote>
+                    <div class="regular-text center" style="margin-left: 5%; margin-right: 5%;">
+                        A repository is a set of "packages"...
+                    </div>
+                </section>
+                <section>
+                    <h4>Package</h4>
+                    <blockquote class="quote">
+                        <span>Subdirectory in a Repository containing source code and build instructions</span>
+                    </blockquote>
+                    <div class="regular-text center" style="margin-left: 5%; margin-right: 5%;">
+                        A Package directory includes all files in its directory, plus all subdirectories beneath it and contains "BUILD.bazel" config file which defines "targets"...
+                    </div>
+                </section>
+                <section>
+                    <h4>Target</h4>
+                    <div class="regular-text center" style="margin-left: 5%; margin-right: 5%;">
+                        <div>Definition of an action. Most targets are one of two principal kinds:</div>
+                    </div>
+
+                    <div class="container">
+                        <div class="col">
+                            <h5>Rule</h5>
+                            <div class="regular-text center">
+                                A function that has files as input and output.
+                            </div>
+                            <div class="image-container">
+                                <img width="500px" src="./images/bazel_func.png" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <h5>File</h5>
+                            <div class="regular-text center">
+                                Could be source files or generated files as an output from some rule.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h4>Label</h4>
+                    <div class="regular-text center" style="margin-left: 5%; margin-right: 5%;">
+                        <div>Identifier for Target</div>
+                    </div>
+                    <div class="image-container">
+                        <img width="500px" src="./images/label.png" />
+                    </div>
+                </section>
+                <section>
+                    <h4>Wrap Up</h4>
+                    <div class="image-container">
+                        <img width="500px" src="./images/bazel_dir_structure.png" />
+                        <div class="author">Example</div>
+                    </div>
+                </section>
+
+                <section>
+                    <h4>Concepts...</h4>
+                </section>
+    
+                <section>
+                    <h4>Action Graph</h4>
+                    <blockquote class="quote">
+                        <span>The "Action Graph" is Direct Acyclic Graph (DAG) representing dependency relations between Targets.</span>
+                    </blockquote>
+                    <div class="image-container">
+                        <img width="500px" src="./images/action_graph.png" />
+                    </div>
+                </section>
+            </section>
+
+            <section>
+                <h3>How we use Bazel to build the vSAN UI?</h3>
+            </section>
+        </div>
+    </div>
+
+    <script src="./lib/reveal.js"></script>
+    <script src="./lib/animations/three.min.js"></script>
+    <script src="./lib/animations/vanta.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+    <script>
+        // Bootstrap the presentation
+        Reveal.initialize({
+            hash: true
+        });
+
+        // Background network
+        VANTA.NET({
+          el: "#net",
+          color: 0x122b13,
+          backgroundColor: 0x000000,
+          mouseControls: true,
+          touchControls: true,
+          gyroControls: false,
+          minHeight: 200.00,
+          minWidth: 200.00,
+          scale: 1.00,
+          scaleMobile: 1.00,
+          points: 20.00,
+          maxDistance: 40.00,
+          spacing: 15.00
+        });
+
+        // 3D slides effect
+        window.onload = function () {
+            $("body").on("mousemove", ".present", function(e) {
+                var $el = $(this);
+                let xAxis = (window.innerWidth / 2 - e.pageX) / 300;
+                let yAxis = (window.innerHeight / 2 - e.pageY) / 300;
+                $el.css("transform", `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`);
+            });
+        };
+    </script>
+</body>
+
+</html>
