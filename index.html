@@ -12,6 +12,7 @@
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Sigmar+One&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300&display=swap');
 
         body * {
             font-family: 'Sigmar One', cursive !important;
@@ -77,7 +78,7 @@
 
         .quote {
             font-size: 1.7rem !important;
-            text-align: right !important;
+            text-align: center !important;
         }
 
         .quote > .author {
@@ -106,6 +107,32 @@
             height: 700px;
             background-color: black;
         }
+
+        .green {
+            color: greenyellow !important;
+        }
+
+        .blue {
+            color: deepskyblue !important;
+        }
+
+        .fit-and-center {
+            margin: auto;
+            width: fit-content;
+            max-width: 60%;
+        }
+
+        .code {
+            font-weight: 700;
+            background-color: black;
+            color: greenyellow;
+            font-family: 'Fira Code', monospace !important;
+        }
+
+        .file {
+            color: greenyellow;
+            font-family: 'Fira Code', monospace !important;
+        }
     </style>
 </head>
 
@@ -113,33 +140,34 @@
     <div class="reveal">
         <div class="slides">
             <section>
-                <h1 class="not-bold italic">vSAN UI and Bazel</h6>
+                <h1 class="not-bold italic"><span class="blue">vSAN UI</span> and <span class="green">Bazel</span></h6>
             </section>
 
             <section>
                 <h2>Overview</h2>
                 <ol class="large-text">
-                    <li>What is Bazel?</li>
-                    <li>What Bazel does?</li>
-                    <li>How Bazel does it?</li>
-                    <li>How we use Bazel to build the vSAN UI?</li>
+                    <li>What is <span class="green">Bazel</span>?</li>
+                    <li>What <span class="green">Bazel</span> does?</li>
+                    <li>How <span class="green">Bazel</span> does it?</li>
+                    <li>What is <span class="green">vBazel</span>?</li>
+                    <li>How we use <span class="green">Bazel</span> to build the <span class="blue">vSAN UI</span>?</li>
                 </ol>
             </section>
 
             <section>
                 <section>
-                    <h3>What is Bazel?</h3>
+                    <h3>What is <span class="green">Bazel</span>?</h3>
                 </section>
                 <section>
                     <blockquote class="quote">
-                        <span>Build orchestrator tool supporting multiple languages and building outputs for multiple platforms.</span>
+                        <span>Build tool supporting <span class="green">multiple languages</span> and building for <span class="green">multiple platforms</span>.</span>
                     </blockquote>
                 </section>
             </section>
 
             <section>
                 <section>
-                    <h3>What Bazel does?</h3>
+                    <h3>What <span class="green">Bazel</span> does?</h3>
                 </section>
                 <section>
                     <h4>Define build actions</h4>
@@ -148,83 +176,104 @@
                     <h4>Analyze dependency relations</h4>
                 </section>
                 <section>
-                    <h4>Build in the most effective way</h4>
+                    <h4>Build in the most efficient way</h4>
                 </section>
             </section>
 
             <section>
                 <section>
-                    <h3>How Bazel does it?</h3>
+                    <h3>How <span class="green">Bazel</span> does it?</h3>
                 </section>
                 <section>
                     <h4>Definition of terms...</h4>
                 </section>
                 <section>
-                    <h4>Workspace</h4>
+                    <h4 class="green">Workspace</h4>
                     <blockquote class="quote">
-                        <span>The root directory containing all of the source files to build and configurations about external dependencies.</span>
+                        <span>Refers to the root directory which contains all source files + external dependencies configuration.</span>
                     </blockquote>
                     <div class="regular-text center" style="margin-left: 5%; margin-right: 5%;">
-                        A WORKSPACE directory contains "WORKSPACE.bazel" config file which defines a "repository" and also describes references
-                        to external "repositories" required for the build.
+                        A <span class="green">workspace</span> directory contains <span class="file">WORKSPACE.bazel</span> file which defines the <span class="green">main repository</span> and also describes references
+                        to <span class="green">external repositories</span> required for the build.
+                    </div>
+                    <div class="image-container">
+                        <img width="500px" src="./images/workspace_diagram.svg" />
                     </div>
                 </section>
                 <section>
-                    <h4>Repository</h4>
+                    <h4 class="green">Repository</h4>
                     <blockquote class="quote">
                         <span>Directory containing source code and build instructions</span>
                     </blockquote>
                     <div class="regular-text center" style="margin-left: 5%; margin-right: 5%;">
-                        A repository is a set of "packages"...
+                        The <span class="green">WORKSPACE</span> directory is the root of the <span class="green">main repository</span>, also called <span class="green">@</span>.
+                        Other, <span class="green">external repositories</span> are defined in the <span class="file">WORKSPACE.bazel</span> file.
+                        <span class="green">Repository</span> itself could be regarded as a set of <span class="green">packages</span>...
+                    </div>
+                    <div class="image-container">
+                        <img width="700px" src="./images/repository_diagram.svg" />
                     </div>
                 </section>
                 <section>
-                    <h4>Package</h4>
+                    <h4 class="green">Package</h4>
                     <blockquote class="quote">
-                        <span>Subdirectory in a Repository containing source code and build instructions</span>
+                        <span>Subdirectory in a <span class="green">repository</span> which has build instructions defined</span>
                     </blockquote>
                     <div class="regular-text center" style="margin-left: 5%; margin-right: 5%;">
-                        A Package directory includes all files in its directory, plus all subdirectories beneath it and contains "BUILD.bazel" config file which defines "targets"...
+                        A <span class="green">package</span> directory includes all files in its directory, plus all subdirectories beneath it and contains <span class="file">BUILD.bazel</span> file which defines <span class="green">targets</span>...
+                    </div>
+                    <div class="image-container">
+                        <img width="900px" src="./images/package_diagram3.svg" />
                     </div>
                 </section>
                 <section>
-                    <h4>Target</h4>
+                    <h4 class="green">Target</h4>
                     <div class="regular-text center" style="margin-left: 5%; margin-right: 5%;">
-                        <div>Definition of an action. Most targets are one of two principal kinds:</div>
+                        <div>Definition of an action. Most <span class="green">targets</span> are one of two principal kinds:</div>
                     </div>
 
                     <div class="container">
                         <div class="col">
-                            <h5>Rule</h5>
+                            <h5 class="green">Rule</h5>
                             <div class="regular-text center">
-                                A function that has files as input and output.
+                                A <span class="green">function</span> that has <span class="green">files</span> as <span class="green">input</span> and <span class="green">output</span>.
+                            </div>
+                            <div class="regular-text center">
+                                Chaining between <span class="green">rules</span> is supported. In other words,
+                                one <span class="green">rule</span> input files could be another <span class="green">rule</span> output files.
+                                
                             </div>
                             <div class="image-container">
                                 <img width="500px" src="./images/bazel_func.png" />
                             </div>
                         </div>
                         <div class="col">
-                            <h5>File</h5>
+                            <h5 class="green">File</h5>
                             <div class="regular-text center">
-                                Could be source files or generated files as an output from some rule.
+                                Could be <span class="green">source files</span> or <span class="green">generated files</span> as an output from some <span class="green">rule</span>.
                             </div>
                         </div>
                     </div>
                 </section>
                 <section>
-                    <h4>Label</h4>
+                    <h4 class="green">Label</h4>
                     <div class="regular-text center" style="margin-left: 5%; margin-right: 5%;">
-                        <div>Identifier for Target</div>
+                        <div>Identifier for <span class="green">target</span></div>
                     </div>
                     <div class="image-container">
                         <img width="500px" src="./images/label.png" />
                     </div>
                 </section>
                 <section>
-                    <h4>Wrap Up</h4>
-                    <div class="image-container">
-                        <img width="500px" src="./images/bazel_dir_structure.png" />
-                        <div class="author">Example</div>
+                    <h4>Why so many configurations?</h4>
+                    <div class="container">
+                        <div class="col image-container">
+                            <img width="500px" src="./images/bazel_dir_structure.png" />
+                            <div class="author">Sample workspace structure</div>
+                        </div>
+                        <div class="col regular-text">
+                            The simple answer is <span class="green">Bazel</span> wants you to split your monolitic build into smaller pieces (<span class="green">targets</span>) as much as possible. But why?
+                        </div>
                     </div>
                 </section>
 
@@ -233,18 +282,134 @@
                 </section>
     
                 <section>
-                    <h4>Action Graph</h4>
+                    <h4 class="green">Action Graph</h4>
                     <blockquote class="quote">
-                        <span>The "Action Graph" is Direct Acyclic Graph (DAG) representing dependency relations between Targets.</span>
+                        <span>The <span class="green">Action Graph</span> is Direct Acyclic Graph (DAG) representing dependency relations between <span class="green">targets</span>.</span>
                     </blockquote>
                     <div class="image-container">
                         <img width="500px" src="./images/action_graph.png" />
                     </div>
                 </section>
+
+                <section>
+                    <h4>Effective Caching</h4>
+                    <div class="regular-text center">
+                        At each incremental build, <span class="green">Bazel</span> analyzes and reconstructs
+                        the <span class="green">Action Graph</span> in order
+                        to find the minimum subforest of <span class="green">targets</span> it must rebuild.
+                    </div>
+                    <div class="image-container">
+                        <img width="500px" src="./images/cache.png" />
+                    </div>
+                </section>
+
+                <section>
+                    <h4>Parallel Execution</h4>
+                    <div class="regular-text center">
+                        Independent <span class="green">targets</span> could be executed in parallel.
+                    </div>
+                    <div class="image-container">
+                        <img width="500px" src="./images/parallel_execution.png" />
+                    </div>
+                </section>
+
+                <section>
+                    <h4>Stages of the <span class="green">Bazel</span> build process</h4>
+                    <ol class="fit-and-center">
+                        <li>
+                            <div class="green">Loading phase</div>
+                            <div class="medium-text">
+                                Load and evaluate all <span class="file">BUILD.bazel</span> files that are needed for the build.
+                                The execution of the <span class="file">BUILD.bazel</span> files simply instantiates <span class="green">rules</span>
+                                (each time a <span class="green">rule</span> is called, it gets added to a graph).
+                            </div>
+                        </li>
+                        <li>
+                            <div class="green">Analysis phase</div>
+                            <div class="medium-text">
+                                The code of the <span class="green">rules</span> is executed (their <span class="green">implementation function</span>), and <span class="green">actions</span> are instantiated.
+                                An <span class="green">action</span> describes how to generate a <span class="green">set of outputs</span> from a <span class="green">set of inputs</span>.
+                                In other words, the <span class="green">Analysis phase</span> takes the graph generated by the <span class="green">Loading phase</span> and generates an <span class="green">action graph</span>.
+                            </div>
+                        </li>
+                        <li>
+                            <div class="green">Execution phase</div>
+                            <div class="medium-text">
+                                <span class="green">Actions</span> are executed, when at least one of their <span class="green">outputs</span> is required.
+                                If a file is missing or if a command fails to generate one output, the build fails.
+                            </div>
+                        </li>
+                    </ol>
+                </section>
+
+                <section>
+                    <h4>Syntax of <span class="green">Bazel</span></h4>
+                    <div class="regular-text fit-and-center">
+                        <span class="green">Bazel</span> build files are written in <span class="green">Starlark</span>(dialect of Python).
+                    </div>
+                    <div class="image-container">
+                        <img width="800px" src="./images/Genrule.PNG" />
+                    </div>
+                </section>
             </section>
 
             <section>
-                <h3>How we use Bazel to build the vSAN UI?</h3>
+                <section>
+                    <h3>What is <span class="green">vBazel</span>?</h3>
+                </section>
+                <section>
+                    <span><span class="green">vBazel</span> is a <span class="blue">VMware</span> developed wrapper of <span class="green">Bazel</span>.</span>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h3>How we use <span class="green">Bazel</span> to build the <span class="blue">vSAN UI</span>?</h3>
+                </section>
+                <section>
+                    <h4>Prerequisites...</h4>
+                </section>
+                <section>
+                    <h4>Setup new <span class="blue">Perforce Workspace</span></h4>
+                    <div class="container">
+                        <div class="col image-container">
+                            <img width="500px" src="./images/action_graph.png" />
+                            <div class="author">Perfoce workspace mappings</div>
+                        </div>
+                        <div class="col regular-text">
+                            Keep in mind that bazel depends on the file/directory structure of the source,
+                            so you must use the exact mappings above.
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h4>Configure GitLab SSH Access</h4>
+                    <ol class="regular-text">
+                       <li>Generate public/private key pair using <span class="code">ssh-keygen</span></li>
+                       <li>Configure the ssh connection to gitlab in <span class="file">~/.ssh/config</span> file</li>
+                       <li>Add your public key in your account info at <span class="blue">gitlab.eng.vmware.com</span></li>
+                    </ol>   
+                </section>
+                <section>
+                    <h4>Configure the <span class="green">Bazel Workspace</span></h4>
+                    <div class="fit-and-center regular-text">
+                        <span>By running <span class="code">vbazel</span> it would:</span>
+                        <div>
+                            <ul>
+                                <li>Generate <span class="file">WORKSPACE.bazel</span> file</li>
+                                <li>Register <span class="blue">gobuild dependencies</span> in the <span class="file">WORKSPACE.bazel</span></li>
+                                <li>Configure <span class="green">external repositories</span> in the <span class="file">WORKSPACE.bazel</span></li>
+                                <li>Override some default build settings in the <span class="file">WORKSPACE.bazel</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h4>Build the <span class="blue">vSAN UI plugin</span></h4>
+                    <div class="fit-and-center code regular-text">
+                        vbazel build //vsan-mgmt-ui/h5-plugin/h5-vsan-ui
+                    </div>
+                </section>
             </section>
         </div>
     </div>
@@ -254,6 +419,8 @@
     <script src="./lib/animations/vanta.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
     <script>
+       
+
         // Bootstrap the presentation
         Reveal.initialize({
             hash: true
@@ -280,8 +447,8 @@
         window.onload = function () {
             $("body").on("mousemove", ".present", function(e) {
                 var $el = $(this);
-                let xAxis = (window.innerWidth / 2 - e.pageX) / 300;
-                let yAxis = (window.innerHeight / 2 - e.pageY) / 300;
+                let xAxis = (window.innerWidth / 2 - e.pageX) / 2500;
+                let yAxis = (window.innerHeight / 2 - e.pageY) / 2500;
                 $el.css("transform", `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`);
             });
         };
